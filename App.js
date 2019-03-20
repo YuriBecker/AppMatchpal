@@ -6,15 +6,61 @@ import {
   View,
   Text,
   SafeAreaView,
-  Picker
+  Picker,
+  ScrollView
 } from 'react-native';
 import { Button, ThemeProvider, Image, Header } from 'react-native-elements';
-import image from './assets/matchpal.png';
+import BottomNavigation, {
+  IconTab,
+  Badge,
+  FullTab
+} from 'react-native-material-bottom-navigation';
+import Icon from '@expo/vector-icons/FontAwesome';
 
 export default class App extends React.Component {
+  state = {
+    activeTab: 'games'
+  };
+
+  tabs = [
+    {
+      key: 'partidas',
+      label: 'Partidas',
+      barColor: '#1565C0',
+      pressColor: 'rgba(255, 255, 255, 0.16)',
+      icon: 'soccer-ball-o'
+    },
+    {
+      key: 'criarPartida',
+      label: 'Criar Partida',
+      barColor: '#1565C0',
+      pressColor: 'rgba(255, 255, 255, 0.16)',
+      icon: 'plus'
+    }
+  ];
+
+  state = {
+    activeTab: this.tabs[0].key
+  };
+
+  renderIcon = icon => ({ isActive }) => (
+    <Icon size={24} color="white" name={icon} />
+  );
+
+  renderTab = ({ tab, isActive }) => (
+    <FullTab
+      isActive={isActive}
+      showBadge={tab.key === 'movies-tv'}
+      renderBadge={() => <Badge>2</Badge>}
+      key={tab.key}
+      label={tab.label}
+      renderIcon={this.renderIcon(tab.icon)}
+    />
+  );
+
   render() {
     return (
-      <SafeAreaView>
+      <View style={{ flex: 1 }}>
         <Header
           centerComponent={
             <Image
@@ -23,27 +69,19 @@ export default class App extends React.Component {
             />
           }
         />
-        <View style={styles.container} />
-      </SafeAreaView>
+        <ScrollView>
+          <Text>MAIN CONTENT</Text>
+        </ScrollView>
+        <BottomNavigation
+          tabs={this.tabs}
+          activeTab={this.state.activeTab}
+          onTabPress={newTab => this.setState({ activeTab: newTab.key })}
+          renderTab={this.renderTab}
+          useLayoutAnimation
+        />
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eee',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  title: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 25
-  },
-  AndroidSafeArea: {
-    flex: 1,
-    backgroundColor: '#4DE2EB',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
-  }
-});
+const styles = StyleSheet.create({});
