@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 30570,
+  "expoServerNgrokUrl": "https://mp-u4c.anonymous.appmatchpal.exp.direct",
+  "packagerNgrokUrl": "https://packager.mp-u4c.anonymous.appmatchpal.exp.direct",
+  "ngrokPid": 30620,
+  "webpackServerPort": null
+}
