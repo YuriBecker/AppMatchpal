@@ -8,21 +8,15 @@ import {
   Picker,
   ScrollView
 } from 'react-native';
-import {
-  Button,
-  Text,
-  ThemeProvider,
-  Image,
-  Header,
-  Input
-} from 'react-native-elements';
+import { Button, Text, Image, Header, Input } from 'react-native-elements';
 import BottomNavigation, {
   IconTab,
   Badge,
   FullTab
 } from 'react-native-material-bottom-navigation';
 import Icon from '@expo/vector-icons/FontAwesome';
-
+import CriarPartida from './components/CriarPartida';
+import Partidas from './components/Partidas';
 export default class App extends React.Component {
   tabs = [
     {
@@ -43,7 +37,8 @@ export default class App extends React.Component {
 
   state = {
     activeTab: this.tabs[0].key,
-    nameTab: this.tabs[0].label
+    nameTab: this.tabs[0].label,
+    news: 0
   };
 
   renderIcon = icon => ({ isActive }) => (
@@ -53,8 +48,8 @@ export default class App extends React.Component {
   renderTab = ({ tab, isActive }) => (
     <FullTab
       isActive={isActive}
-      showBadge={tab.key === 'partidas'}
-      renderBadge={() => <Badge>0</Badge>}
+      showBadge={tab.key === 'partidas' && this.state.news > 0}
+      renderBadge={() => <Badge>{this.state.news}</Badge>}
       key={tab.key}
       label={tab.label}
       renderIcon={this.renderIcon(tab.icon)}
@@ -79,13 +74,11 @@ export default class App extends React.Component {
           {this.state.nameTab}
         </Text>
         <ScrollView>
-          <View>
-            {this.state.nameTab === 'Criar Partida' ? (
-              <CriarPartida />
-            ) : (
-              <Text>LISTA DE PARTIDAS</Text>
-            )}
-          </View>
+          {this.state.activeTab === 'partidas' ? (
+            <Partidas />
+          ) : (
+            <CriarPartida />
+          )}
         </ScrollView>
         <BottomNavigation
           tabs={this.tabs}
@@ -101,58 +94,4 @@ export default class App extends React.Component {
   }
 }
 
-class CriarPartida extends React.Component {
-  render() {
-    return (
-      <View>
-        <Input placeholder="BASIC INPUT" />
-
-        <Input
-          placeholder="INPUT WITH ICON"
-          leftIcon={{ type: 'font-awesome', name: 'chevron-left' }}
-        />
-
-        <Input
-          placeholder="INPUT WITH CUSTOM ICON"
-          leftIcon={<Icon name="user" size={24} color="black" />}
-        />
-
-        <Input placeholder="INPUT WITH SHAKING EFFECT" shake={true} />
-
-        <Input
-          placeholder="INPUT WITH ERROR MESSAGE"
-          errorStyle={{ color: 'red' }}
-          errorMessage="ENTER A VALID ERROR HERE"
-        />
-        <Text style={styles.welcome}>Nome da partida</Text>
-        <Text style={styles.welcome}>
-          Data no campo Data chamar calendário.
-        </Text>
-        <Text style={styles.welcome}>
-          Hora - No campo da Hora chamar o relógio
-        </Text>
-        <Text style={styles.welcome}>Esporte</Text>
-        <Text style={styles.welcome}>
-          Abaixo dos campos, apresentar um botão “Criar partida”, no qual salva
-          os dados num banco de dados local e zera os campos.
-        </Text>
-        <Text style={styles.welcome}>
-          Os dados salvos são carregados na tab 2 no formato que você desejar,
-          desde que mostre todos os dados.
-        </Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  welcome: {
-    flex: 1,
-    margin: 20,
-    backgroundColor: 'orange',
-    margin: 10,
-    textAlign: 'center',
-    fontSize: 20,
-    paddingTop: 70
-  }
-});
+const styles = StyleSheet.create({});
