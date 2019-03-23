@@ -1,15 +1,22 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, Input, Button } from 'react-native-elements';
 import Icon from '@expo/vector-icons/FontAwesome';
+import DatePicker from 'react-native-datepicker';
 
 class CriarPartida extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { nomePartida: '', Esporte: '', Data: new Date(), Hora: '' };
+  }
+
   render() {
     return (
       <View
         style={{
           flex: 1,
-          alignItems: 'center'
+          alignItems: 'center',
+          margin: 30
         }}
       >
         <Input
@@ -24,9 +31,59 @@ class CriarPartida extends React.Component {
           inputStyle={{ marginLeft: 12 }}
         />
 
-        <Text style={styles.welcome}>
-          Data no campo Data chamar calendário.
-        </Text>
+        <Button
+          title={'Dia'}
+          leftIcon={{ type: 'font-awesome', name: 'soccer-ball-o', size: 24 }}
+          inputStyle={{ marginLeft: 12 }}
+          onPress={() => {
+            this.refs.datepicker.onPressDate();
+          }}
+        />
+
+        <Button
+          title={'Hora'}
+          leftIcon={{ type: 'font-awesome', name: 'soccer-ball-o', size: 24 }}
+          inputStyle={{ marginLeft: 12 }}
+          onPress={() => {
+            this.refs.timepicker.onPressDate();
+          }}
+        />
+
+        <DatePicker
+          style={{ width: 0, height: 0 }}
+          showIcon={false}
+          format="DD-MM-YYYY"
+          minDate={this.state.Data}
+          onDateChange={date => {
+            this.setState({ Data: date });
+          }}
+          customStyles={{
+            dateInput: {
+              width: 0,
+              height: 0,
+              borderWidth: 0
+            }
+          }}
+          ref="datepicker"
+        />
+
+        <DatePicker
+          style={{ width: 0, height: 0 }}
+          showIcon={false}
+          onDateChange={hora => {
+            this.setState({ Hora: hora });
+          }}
+          mode="time"
+          customStyles={{
+            dateInput: {
+              width: 0,
+              height: 0,
+              borderWidth: 0
+            }
+          }}
+          ref="timepicker"
+        />
+
         <Text style={styles.welcome}>
           Hora - No campo da Hora chamar o relógio
         </Text>
@@ -39,12 +96,7 @@ class CriarPartida extends React.Component {
           desde que mostre todos os dados.
         </Text>
 
-        <Button
-          large
-          rightIcon={{ name: 'code' }}
-          title="Criar partida"
-          rounded="true"
-        />
+        <Button large title="Criar partida" />
       </View>
     );
   }
