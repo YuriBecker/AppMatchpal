@@ -1,16 +1,7 @@
 import React from 'react';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Picker,
-  ScrollView
-} from 'react-native';
-import { Button, Text, Image, Header, Input } from 'react-native-elements';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Text, Image, Header } from 'react-native-elements';
 import BottomNavigation, {
-  IconTab,
   Badge,
   FullTab
 } from 'react-native-material-bottom-navigation';
@@ -56,6 +47,12 @@ export default class App extends React.Component {
     />
   );
 
+  novaPartida = () => {
+    this.setState(state => {
+      return { news: 1 + state.news };
+    });
+  };
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -87,16 +84,22 @@ export default class App extends React.Component {
           {this.state.activeTab === 'partidas' ? (
             <Partidas />
           ) : (
-            <CriarPartida />
+            <CriarPartida atualiza={this.novaPartida.bind(this)} />
           )}
         </ScrollView>
         <BottomNavigation
           tabs={this.tabs}
           activeTab={this.state.activeTab}
           onTabPress={newTab =>
-            this.setState({ activeTab: newTab.key, nameTab: newTab.label })
+            this.setState(ps => {
+              return {
+                activeTab: newTab.key,
+                nameTab: newTab.label,
+                news: newTab.label === 'Partidas' ? 0 : ps.news
+              };
+            })
           }
-          renderTab={this.renderTab}
+          renderTab={this.renderTab.bind(this)}
           useLayoutAnimation={true}
         />
       </View>

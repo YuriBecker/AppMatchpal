@@ -3,12 +3,42 @@ import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import { Hoshi } from 'react-native-textinput-effects';
+import store from 'react-native-simple-store';
 
 class CriarPartida extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { nomePartida: null, Esporte: null, Data: null, Hora: null };
+    this.state = {
+      NomePartida: null,
+      Esporte: null,
+      Data: null,
+      Hora: null,
+      Erro: false
+    };
   }
+
+  save = async () => {
+    const partida = {
+      NomePartida: this.state.NomePartida,
+      Esporte: this.state.Esporte,
+      Data: this.state.Data,
+      Hora: this.state.Hora
+    };
+    store.push('PARTIDAS', partida).then(
+      this.setState({
+        NomePartida: null,
+        Esporte: null,
+        Data: null,
+        Hora: null,
+        Erro: false
+      })
+    );
+    this.props.atualiza();
+  };
+
+  error = () => {
+    this.setState({ Erro: true });
+  };
 
   render() {
     return (
@@ -20,16 +50,30 @@ class CriarPartida extends React.Component {
       >
         <Hoshi
           label={'Nome da partida'}
-          labelStyle={{ color: '#a3a3a3' }}
+          labelStyle={{
+            color:
+              this.state.NomePartida === null && this.state.Erro === true
+                ? '#ff0000'
+                : '#a3a3a3'
+          }}
           inputStyle={{ color: 'black', fontWeight: 'normal' }}
           borderColor="#1565C0"
+          onChangeText={data => this.setState({ NomePartida: data })}
+          value={this.state.NomePartida}
         />
         <Hoshi
           label={'Esporte'}
-          labelStyle={{ color: '#a3a3a3' }}
+          labelStyle={{
+            color:
+              this.state.Esporte === null && this.state.Erro === true
+                ? '#ff0000'
+                : '#a3a3a3'
+          }}
           inputStyle={{ color: '#333333', fontWeight: 'normal' }}
           borderColor="#1565C0"
           style={{ marginTop: 10 }}
+          onChangeText={data => this.setState({ Esporte: data })}
+          value={this.state.Esporte}
         />
         <View
           style={{
@@ -51,7 +95,16 @@ class CriarPartida extends React.Component {
             }}
             raised={true}
             type="outline"
-            buttonStyle={{ width: 160, borderRadius: 50 }}
+            buttonStyle={{
+              width: 160,
+              borderRadius: 50
+            }}
+            titleStyle={{
+              color:
+                this.state.Data === null && this.state.Erro === true
+                  ? '#ff0000'
+                  : '#1565C0'
+            }}
           />
 
           <Button
@@ -65,6 +118,12 @@ class CriarPartida extends React.Component {
             raised={true}
             type="outline"
             buttonStyle={{ width: 160, borderRadius: 50 }}
+            titleStyle={{
+              color:
+                this.state.Hora === null && this.state.Erro === true
+                  ? '#ff0000'
+                  : '#1565C0'
+            }}
           />
         </View>
 
@@ -77,6 +136,14 @@ class CriarPartida extends React.Component {
             alignItems: 'center',
             marginTop: 30
           }}
+          onPress={
+            this.state.NomePartida !== null &&
+            this.state.Esporte !== null &&
+            this.state.Data !== null &&
+            this.state.Hora !== null
+              ? this.save
+              : this.error
+          }
         />
 
         <DatePicker
