@@ -70,7 +70,17 @@ export default class App extends React.Component {
             />
           }
         />
-        <Text h4 style={{ textAlign: 'center' }}>
+        <Text
+          h4
+          style={{
+            marginTop: 60,
+            textAlign: 'center',
+            color: '#1565C0',
+            fontSize: 20,
+            fontWeight: 'bold',
+            opacity: 0.8
+          }}
+        >
           {this.state.nameTab}
         </Text>
         <ScrollView>
